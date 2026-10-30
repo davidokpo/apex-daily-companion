@@ -1,0 +1,1087 @@
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#09090b"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Apex"><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" type="image/svg+xml" href="/icon.svg"><link rel="apple-touch-icon" href="/icon.svg"><style>:root{color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#09090b;color:#f4f4f5}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Apex Daily Companion</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+<style>
+/* Layout: one iPhone-width column. Large title up top, a floating glass tab bar at the bottom,
+   inset-grouped lists, bottom sheets for swap and phone routines. Dark only, by design. */
+:root {
+  --bg: #09090b;
+  --raised: #111114;
+  --surface: rgba(255,255,255,.04);
+  --surface-2: rgba(255,255,255,.07);
+  --line: rgba(255,255,255,.10);
+  --line-soft: rgba(255,255,255,.06);
+  --tx: #f4f4f5;
+  --tx-2: #a1a1aa;
+  --tx-3: #71717a;
+  --gold: #e5b76b;
+  --violet: #a78bfa;
+  --cyan: #67e8f9;
+  --mint: #6ee7b7;
+  --rose: #fda4af;
+  --slate: #94a3b8;
+  --zinc: #a1a1aa;
+  --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Geist", system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-serif: "Instrument Serif", "New York", Georgia, serif;
+  --ease: cubic-bezier(.32,.72,0,1);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { background: var(--bg); }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--tx);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 14px 0;
+  min-height: 100vh;
+}
+[hidden] { display: none !important; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; border-radius: 10px; }
+.ambient { position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(520px 320px at 8% -4%, rgba(229,183,107,.10), transparent 70%),
+    radial-gradient(520px 360px at 100% 6%, rgba(167,139,250,.10), transparent 70%); }
+.app { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; padding-bottom: 130px; }
+
+/* ---------- shared pieces ---------- */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 24px;
+  -webkit-backdrop-filter: blur(20px) saturate(140%); backdrop-filter: blur(20px) saturate(140%); }
+.chip { display: inline-flex; align-items: center; height: 22px; padding: 0 9px; border-radius: 999px; font-size: 11px; font-weight: 600; letter-spacing: .02em;
+  color: var(--c, var(--tx-2)); background: color-mix(in srgb, var(--c, var(--zinc)) 14%, transparent); }
+.eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--tx-3); margin: 0; }
+.sq { flex: none; width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center;
+  color: var(--c, var(--zinc)); background: color-mix(in srgb, var(--c, var(--zinc)) 14%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c, var(--zinc)) 22%, transparent); }
+.sq svg { width: 19px; height: 19px; stroke-width: 1.9; }
+.view { display: flex; flex-direction: column; gap: 16px; animation: viewIn .45s var(--ease); }
+@keyframes viewIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ---------- top bar & titles ---------- */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: -.01em; min-width: 0; }
+.logo { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center;
+  background: linear-gradient(145deg, #f1cf8c, #a78bfa); box-shadow: 0 6px 18px -6px rgba(167,139,250,.6); }
+.brand .chip { --c: var(--violet); }
+.clock { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 999px;
+  background: var(--surface); border: 1px solid var(--line); font-family: var(--font-mono); font-size: 14px; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--gold); }
+.clock i { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: breathe 2s ease-in-out infinite; }
+@keyframes breathe { 50% { opacity: .35; transform: scale(.8); } }
+.titleblock { display: flex; flex-direction: column; gap: 4px; padding: 8px 2px 2px; }
+.titleblock h1 { margin: 0; font-size: 34px; line-height: 1.08; letter-spacing: -.03em; font-weight: 700; text-wrap: balance; }
+
+/* ---------- now card ---------- */
+.hero { position: relative; overflow: hidden; background: #0e0e12; border-color: var(--line); }
+.hero[data-period="night"] { --sky1:#1c1744; --sky2:#0d0d1a; --orb:#ece7ff; --h1:#171331; --h2:#0f0d20; }
+.hero[data-period="dawn"]  { --sky1:#2c2449; --sky2:#9a6a5c; --orb:#f4cd92; --h1:#2a2040; --h2:#1a1530; }
+.hero[data-period="day"]   { --sky1:#17384a; --sky2:#3d7088; --orb:#f6d98f; --h1:#143040; --h2:#0e2230; }
+.hero[data-period="dusk"]  { --sky1:#2b1f4d; --sky2:#a05c6c; --orb:#f4ae80; --h1:#241a42; --h2:#171230; }
+.hero-art { position: absolute; left: 0; top: 0; width: 100%; height: 150px; -webkit-mask-image: linear-gradient(#000 45%, transparent); mask-image: linear-gradient(#000 45%, transparent); }
+.hero[data-period="day"] .moon, .hero[data-period="dusk"] .moon, .hero[data-period="dawn"] .moon { display: none; }
+.hero[data-period="night"] .sun { display: none; }
+.hero[data-period="day"] .stars, .hero[data-period="dusk"] .stars { opacity: 0; }
+.hero[data-period="dawn"] .stars { opacity: .4; }
+.hero:not([data-period="day"]) .cloud { display: none; }
+.hero-body { position: relative; padding: 18px; display: flex; flex-direction: column; gap: 6px; }
+.hero-eyebrow { display: flex; align-items: center; gap: 9px; margin-bottom: 40px; }
+.hero-eyebrow .eyebrow { color: var(--cyan); }
+.live { position: relative; width: 9px; height: 9px; }
+.live::before, .live::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--cyan); }
+.live::before { animation: ping 1.8s ease-out infinite; opacity: .6; }
+@keyframes ping { to { transform: scale(2.6); opacity: 0; } }
+.hero h2 { margin: 0; font-size: 22px; line-height: 1.2; letter-spacing: -.02em; font-weight: 650; text-wrap: balance; }
+.hero p { margin: 0; color: var(--tx-2); font-size: 14px; }
+.hero-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; }
+.time-chip { font-family: var(--font-mono); font-size: 13px; font-weight: 500; color: var(--tx-2); font-variant-numeric: tabular-nums; }
+.pill-btn { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px; border-radius: 999px; font-size: 14px; font-weight: 600;
+  background: var(--surface-2); border: 1px solid var(--line); transition: transform .2s var(--ease), background .2s; }
+.pill-btn svg { width: 16px; height: 16px; color: var(--cyan); }
+.pill-btn:active { transform: scale(.96); background: rgba(255,255,255,.11); }
+
+/* ---------- quote ---------- */
+.quote { position: relative; padding: 18px 18px 14px; overflow: hidden; touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }
+.quote::after { content: ""; position: absolute; right: -40px; bottom: -50px; width: 160px; height: 160px; border-radius: 50%; background: radial-gradient(circle, rgba(229,183,107,.16), transparent 70%); pointer-events: none; }
+.quote-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.quote-cat { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.quote-cat .eyebrow { color: var(--gold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.round-btn { flex: none; width: 44px; height: 44px; margin: -6px -6px -6px 0; border-radius: 50%; display: grid; place-items: center; color: var(--tx-2); transition: background .2s, transform .3s var(--ease); }
+.round-btn:active { background: var(--surface-2); transform: rotate(120deg); }
+.round-btn svg { width: 17px; height: 17px; }
+.q-body { margin-top: 14px; min-height: 118px; }
+.q-body.in-l { animation: qL .4s var(--ease); }
+.q-body.in-r { animation: qR .4s var(--ease); }
+@keyframes qL { from { opacity: 0; transform: translateX(22px); } to { opacity: 1; transform: none; } }
+@keyframes qR { from { opacity: 0; transform: translateX(-22px); } to { opacity: 1; transform: none; } }
+#quoteText { margin: 0; font-family: var(--font-serif); font-style: italic; font-size: 24px; line-height: 1.25; letter-spacing: -.005em; text-wrap: pretty; }
+#quoteAuthor { margin: 10px 0 0; font-size: 13px; color: var(--tx-3); font-weight: 500; }
+.dots { display: flex; gap: 6px; margin-top: 12px; }
+.dots i { height: 5px; width: 5px; border-radius: 3px; background: rgba(255,255,255,.16); transition: width .35s var(--ease), background .3s; }
+.dots i.on { width: 18px; background: var(--gold); }
+
+/* ---------- progress summary ---------- */
+.progress { display: flex; align-items: center; gap: 16px; padding: 16px 18px; }
+.ring { position: relative; flex: none; width: 84px; height: 84px; }
+.ring svg.r { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring .track { stroke: rgba(255,255,255,.08); }
+.ring .bar { transition: stroke-dashoffset .8s var(--ease); }
+.mascot { position: absolute; inset: 11px; }
+.mascot svg { width: 100%; height: 100%; overflow: visible; display: block; }
+.mascot.bump { animation: bump .6s var(--ease); }
+@keyframes bump { 30% { transform: scale(1.14) rotate(-4deg); } 60% { transform: scale(.97) rotate(3deg); } }
+.progress-text { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.big { font-size: 32px; font-weight: 700; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.big small { font-size: 16px; font-weight: 600; color: var(--tx-3); letter-spacing: 0; }
+#completionRateText { font-family: var(--font-mono); font-size: 12px; color: var(--mint); font-variant-numeric: tabular-nums; }
+#moodLine { font-size: 13px; color: var(--tx-2); margin-top: 2px; }
+
+/* ---------- checklist ---------- */
+.sec-head { display: flex; align-items: center; justify-content: space-between; padding: 4px 6px 0; }
+.sec-head h2 { margin: 0; font-size: 20px; font-weight: 650; letter-spacing: -.02em; }
+.text-btn { height: 44px; padding: 0 8px; margin: -8px -8px -8px 0; display: inline-flex; align-items: center; gap: 6px; color: var(--tx-2); font-size: 14px; font-weight: 600; border-radius: 12px; transition: color .2s; }
+.text-btn svg { width: 15px; height: 15px; }
+.text-btn:active { color: var(--rose); }
+.list { overflow: hidden; }
+.row { display: flex; align-items: center; gap: 14px; min-height: 62px; padding: 10px 16px 10px 14px; cursor: pointer; position: relative;
+  -webkit-user-select: none; user-select: none; transition: background .2s; }
+.row + .row::before { content: ""; position: absolute; left: 56px; right: 0; top: 0; height: 1px; background: var(--line-soft); }
+.row:active { background: var(--surface); }
+.check { flex: none; width: 28px; height: 28px; position: relative; }
+.check svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.check .ring-c { fill: transparent; stroke: rgba(255,255,255,.28); stroke-width: 1.6; transition: fill .3s var(--ease), stroke .3s; }
+.check .tick { fill: none; stroke: #06281c; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 22; stroke-dashoffset: 22; transition: stroke-dashoffset .35s var(--ease) .08s; }
+.row.done .ring-c { fill: var(--mint); stroke: var(--mint); }
+.row.done .tick { stroke-dashoffset: 0; }
+.row.pop .check { animation: pop .5s var(--ease); }
+@keyframes pop { 0% { transform: scale(.82); } 50% { transform: scale(1.18); } 100% { transform: scale(1); } }
+.row-main { min-width: 0; flex: 1; display: block; }
+.row-main .cap { display: block; margin-top: 3px; }
+.label { font-size: 15px; font-weight: 500; line-height: 1.3; color: var(--tx); transition: color .35s;
+  background-image: linear-gradient(currentColor, currentColor); background-repeat: no-repeat; background-position: 0 58%; background-size: 0% 1.6px;
+  transition: background-size .45s var(--ease), color .35s; display: inline; background-position: 0 62%; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.row.done .label { color: var(--tx-3); background-size: 100% 1.6px; }
+.cap { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--c, var(--tx-3)); opacity: .9; transition: opacity .3s; }
+.row.done .cap { opacity: .4; }
+.add { display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 16px; }
+.add input { flex: 1; min-width: 0; height: 44px; background: transparent; border: 0; color: var(--tx); font: inherit; font-size: 15px; outline: none; }
+.add input::placeholder { color: var(--tx-3); }
+.add button { flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--violet); color: #1b1033; transition: transform .2s var(--ease); }
+.add button:active { transform: scale(.9); }
+.add button svg { width: 20px; height: 20px; stroke-width: 2.4; }
+
+/* ---------- plan: week strip ---------- */
+.seg { position: relative; display: grid; grid-template-columns: repeat(7, 1fr); padding: 4px; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); }
+.seg-thumb { position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc((100% - 8px) / 7); border-radius: 18px;
+  background: rgba(255,255,255,.10); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); transform: translateX(calc(var(--i, 0) * 100%)); transition: transform .4s var(--ease); }
+.day-tab { position: relative; z-index: 1; height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border-radius: 18px; color: var(--tx-3); }
+.day-tab .dn { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.day-tab .num { font-size: 18px; font-weight: 650; font-variant-numeric: tabular-nums; color: var(--tx-2); transition: color .25s; }
+.day-tab[aria-selected="true"] .num, .day-tab[aria-selected="true"] .dn { color: var(--tx); }
+.day-tab.today::after { content: ""; position: absolute; bottom: 7px; width: 4px; height: 4px; border-radius: 50%; background: var(--gold); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; padding: 0 4px; font-size: 12px; color: var(--tx-3); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.legend i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn { flex: 1 1 150px; height: 50px; border-radius: 16px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; font-size: 14px; font-weight: 600;
+  background: var(--surface); border: 1px solid var(--line); transition: transform .2s var(--ease), background .2s; }
+.btn svg { width: 17px; height: 17px; }
+.btn:active { transform: scale(.97); }
+.btn.primary { color: #e4d9ff; background: rgba(167,139,250,.16); border-color: rgba(167,139,250,.38); }
+.btn.primary svg { color: var(--violet); }
+
+/* ---------- plan: timeline ---------- */
+.timeline { display: flex; flex-direction: column; }
+.tl-item { display: flex; gap: 10px; padding-bottom: 10px; transition: opacity .4s; }
+.tl-rail { position: relative; flex: none; width: 14px; }
+.tl-rail::before { content: ""; position: absolute; left: 6px; top: 0; bottom: -10px; width: 1px; background: var(--line); }
+.tl-item:last-child .tl-rail::before { bottom: 10px; }
+.tl-dot { position: absolute; left: 1px; top: 24px; width: 11px; height: 11px; border-radius: 50%; background: var(--bg); border: 2px solid var(--c); box-shadow: 0 0 0 3px var(--bg); }
+.tl-card { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; padding: 12px 10px 12px 12px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line-soft); transition: border-color .3s, background .3s, box-shadow .3s; }
+.tl-card.mod { background: rgba(167,139,250,.06); border-color: rgba(167,139,250,.16); }
+.tl-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.tl-time { font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; color: var(--c); font-variant-numeric: tabular-nums; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.tl-time em { font-style: normal; color: var(--tx-3); }
+.tl-title { margin: 0; font-size: 14.5px; font-weight: 600; line-height: 1.3; letter-spacing: -.005em; text-wrap: pretty; }
+.tl-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+.tl-meta .anchor { font-size: 11px; color: var(--tx-3); font-weight: 500; }
+.swap-btn { flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: var(--violet); background: rgba(167,139,250,.12); border: 1px solid rgba(167,139,250,.25); transition: transform .25s var(--ease), background .2s; }
+.swap-btn svg { width: 17px; height: 17px; }
+.swap-btn:active { transform: scale(.9) rotate(180deg); background: rgba(167,139,250,.24); }
+.tl-item.past { opacity: .5; }
+.tl-item.now .tl-card { border-color: rgba(103,232,249,.5); background: rgba(103,232,249,.06); box-shadow: 0 0 0 1px rgba(103,232,249,.15), 0 12px 40px -14px rgba(103,232,249,.35); }
+.tl-item.now .tl-dot { background: var(--cyan); border-color: var(--cyan); }
+.now-tag { display: none; --c: var(--cyan); }
+.tl-item.now .now-tag { display: inline-flex; }
+.foot { text-align: center; color: var(--tx-3); font-size: 12px; line-height: 1.5; padding: 8px 16px 0; text-wrap: balance; }
+.foot small { display: block; margin-top: 4px; font-family: var(--font-mono); font-size: 10px; color: #52525b; }
+
+/* ---------- tab bar ---------- */
+.nav { position: fixed; z-index: 30; left: 50%; transform: translateX(-50%); bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  display: flex; gap: 4px; padding: 5px; border-radius: 999px; background: rgba(24,24,27,.72); border: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(24px) saturate(170%); backdrop-filter: blur(24px) saturate(170%); box-shadow: 0 14px 44px rgba(0,0,0,.55); }
+.nav button { height: 48px; padding: 0 24px; border-radius: 999px; display: inline-flex; align-items: center; gap: 9px; color: var(--tx-3); font-size: 14px; font-weight: 600; transition: background .3s var(--ease), color .3s; }
+.nav button svg { width: 19px; height: 19px; }
+.nav button[aria-selected="true"] { background: rgba(255,255,255,.11); color: var(--tx); }
+
+/* ---------- sheets ---------- */
+.sheet { position: fixed; inset: 0; z-index: 50; display: flex; align-items: flex-end; justify-content: center; visibility: hidden; pointer-events: none; }
+.sheet.open { visibility: visible; pointer-events: auto; }
+.scrim { position: absolute; inset: 0; background: rgba(0,0,0,.6); opacity: 0; transition: opacity .35s; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.sheet.open .scrim { opacity: 1; }
+.panel { position: relative; width: 100%; max-width: 480px; max-height: 88vh; max-height: 88dvh; overflow-y: auto; background: #131316; border: 1px solid var(--line); border-bottom: 0; border-radius: 30px 30px 0 0;
+  padding: 10px max(20px, env(safe-area-inset-left, 0px)) calc(22px + env(safe-area-inset-bottom, 0px)); transform: translateY(104%); transition: transform .5s var(--ease); scrollbar-width: none; }
+.panel::-webkit-scrollbar { display: none; }
+.sheet.open .panel { transform: none; }
+.grab { width: 38px; height: 5px; border-radius: 3px; background: rgba(255,255,255,.18); margin: 0 auto 14px; }
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.panel-head h3 { margin: 0; display: flex; align-items: center; gap: 12px; font-size: 20px; letter-spacing: -.02em; font-weight: 650; }
+.x-btn { flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); color: var(--tx-2); }
+.x-btn svg { width: 17px; height: 17px; }
+.lead { margin: 0 0 18px; color: var(--tx-2); font-size: 14px; line-height: 1.5; }
+.field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.field label { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--tx-3); }
+.select { position: relative; }
+.select select { width: 100%; height: 52px; padding: 0 44px 0 16px; appearance: none; -webkit-appearance: none; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); color: var(--tx); font: inherit; font-size: 15px; outline: none; text-overflow: ellipsis; }
+.select select:focus { border-color: rgba(167,139,250,.6); }
+.select::after { content: ""; position: absolute; right: 18px; top: 50%; width: 8px; height: 8px; border-right: 2px solid var(--tx-3); border-bottom: 2px solid var(--tx-3); transform: translateY(-70%) rotate(45deg); pointer-events: none; }
+.sheet-actions { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.cta { height: 54px; border-radius: 18px; display: flex; align-items: center; justify-content: center; gap: 9px; font-weight: 650; font-size: 16px; background: var(--violet); color: #1b1033; transition: transform .2s var(--ease); }
+.cta:active { transform: scale(.98); }
+.cta svg { width: 18px; height: 18px; stroke-width: 2.4; }
+.ghost { height: 48px; color: var(--tx-2); font-weight: 600; }
+.routines { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+.routine { display: flex; gap: 14px; padding: 14px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line-soft); }
+.routine-main { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.routine-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.routine-top b { font-size: 14.5px; font-weight: 650; color: var(--c); letter-spacing: -.005em; }
+.routine-top .chip { flex: none; --c: var(--tx-2); }
+.routine p { margin: 0; font-size: 13px; line-height: 1.45; color: var(--tx-3); }
+.routine p strong { color: var(--tx-2); font-weight: 600; }
+
+.toast { position: fixed; z-index: 60; left: 50%; bottom: calc(86px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 16px); opacity: 0; pointer-events: none;
+  padding: 12px 18px; border-radius: 999px; font-size: 14px; font-weight: 600; background: rgba(39,39,42,.92); border: 1px solid var(--line); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+  transition: opacity .3s, transform .4s var(--ease); white-space: nowrap; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (min-width: 560px) { body { padding-top: 28px; } .panel { border-bottom: 1px solid var(--line); border-radius: 30px; margin-bottom: 24px; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; } }
+</style>
+<div class="ambient" aria-hidden="true"></div>
+
+<main class="app">
+
+  <header class="top">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2.5c2.6 3.4 5.8 5.6 5.8 10a5.8 5.8 0 0 1-11.6 0c0-2.2 1-3.6 2.2-4.8.3 1.4 1 2.2 1.9 2.6C10 7.5 10.4 5 12 2.5Z" fill="#fff" fill-opacity=".95"/></svg>
+      </span>
+      <span>Apex</span>
+      <span class="chip">Atomic Mode</span>
+    </div>
+    <div class="clock" aria-label="Current time"><i></i><span id="liveClockDisplay">00:00:00</span></div>
+  </header>
+
+  <!-- ================= TODAY ================= -->
+  <div class="view" id="view-today">
+    <div class="titleblock">
+      <p class="eyebrow" id="currentDateDisplay">Loading date...</p>
+      <h1 id="greeting">Good morning</h1>
+    </div>
+
+    <section class="card hero" id="activeNowCard" data-period="day" aria-live="polite">
+      <svg class="hero-art" viewBox="0 0 400 150" preserveAspectRatio="xMidYMin slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sky1)"/><stop offset="1" style="stop-color:var(--sky2)"/></linearGradient>
+          <radialGradient id="orbGlow"><stop offset="0" style="stop-color:var(--orb);stop-opacity:.55"/><stop offset="1" style="stop-color:var(--orb);stop-opacity:0"/></radialGradient>
+          <mask id="moonCut"><rect width="400" height="150" fill="#fff"/><circle cx="341" cy="38" r="19" fill="#000"/></mask>
+        </defs>
+        <rect width="400" height="150" fill="url(#skyG)"/>
+        <g class="stars" fill="#fff" style="transition:opacity .6s">
+          <circle cx="40" cy="22" r="1.4" opacity=".8"/><circle cx="96" cy="46" r="1" opacity=".6"/><circle cx="150" cy="16" r="1.6" opacity=".9"/>
+          <circle cx="212" cy="38" r="1" opacity=".5"/><circle cx="262" cy="14" r="1.3" opacity=".7"/><circle cx="378" cy="64" r="1" opacity=".6"/>
+          <circle cx="20" cy="70" r="1" opacity=".5"/><circle cx="188" cy="70" r="1.2" opacity=".6"/>
+        </g>
+        <circle cx="330" cy="46" r="64" fill="url(#orbGlow)"/>
+        <g class="sun"><circle cx="330" cy="46" r="22" style="fill:var(--orb)"/></g>
+        <g class="moon"><circle cx="330" cy="46" r="22" style="fill:var(--orb)" mask="url(#moonCut)"/></g>
+        <g class="cloud" fill="#fff" opacity=".13"><ellipse cx="236" cy="52" rx="26" ry="8"/><ellipse cx="256" cy="46" rx="16" ry="9"/><ellipse cx="96" cy="34" rx="22" ry="6"/></g>
+        <path d="M0 112C50 84 104 100 170 92s150-26 230 14V150H0Z" style="fill:var(--h1)"/>
+        <path d="M0 128C70 108 130 124 210 116s130-12 190 4V150H0Z" style="fill:var(--h2)"/>
+      </svg>
+      <div class="hero-body">
+        <div class="hero-eyebrow"><span class="live"></span><span class="eyebrow">Current Window</span></div>
+        <h2 id="currentTaskTitle">Evaluating Schedule...</h2>
+        <p id="currentTaskSub">Hold focus on what is before you.</p>
+        <div class="hero-foot">
+          <span class="time-chip" id="currentTaskTime"></span>
+          <button class="pill-btn" onclick="openSwapModal()"><i data-lucide="arrow-left-right"></i>Swap Slot</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card quote" id="quoteCard" tabindex="0" aria-label="Quote. Swipe or use arrow keys to change.">
+      <div class="quote-head">
+        <div class="quote-cat">
+          <span class="sq" style="--c:var(--gold);width:32px;height:32px;border-radius:10px"><i data-lucide="flame"></i></span>
+          <span class="eyebrow" id="quoteCategory">Discipline & Identity</span>
+        </div>
+        <button class="round-btn" id="nextQuoteBtn" aria-label="Shuffle quote"><i data-lucide="refresh-cw"></i></button>
+      </div>
+      <div class="q-body" id="quoteBody">
+        <p id="quoteText">"You do not rise to the level of your goals. You fall to the level of your systems."</p>
+        <p id="quoteAuthor">— James Clear (Atomic Habits)</p>
+      </div>
+      <div class="dots" id="quoteDots" aria-hidden="true"></div>
+    </section>
+
+    <section class="card progress">
+      <div class="ring">
+        <svg class="r" viewBox="0 0 84 84" aria-hidden="true">
+          <defs><linearGradient id="ringG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6ee7b7"/><stop offset="1" stop-color="#67e8f9"/></linearGradient></defs>
+          <circle class="track" cx="42" cy="42" r="38" fill="none" stroke-width="5"/>
+          <circle id="progressBar" class="bar" cx="42" cy="42" r="38" fill="none" stroke="url(#ringG)" stroke-width="5" stroke-linecap="round" stroke-dasharray="238.76" stroke-dashoffset="238.76"/>
+        </svg>
+        <div class="mascot" id="mascot" aria-hidden="true"></div>
+      </div>
+      <div class="progress-text">
+        <div class="big"><span id="bigPercent">0</span><small>%</small></div>
+        <span id="completionRateText">0 / 0 Done</span>
+        <span id="moodLine">Let's make the first move.</span>
+      </div>
+    </section>
+
+    <div class="sec-head">
+      <h2>Non-Negotiables</h2>
+      <button class="text-btn" id="resetChecklistBtn" title="Reset all checkboxes"><i data-lucide="rotate-ccw"></i>Reset</button>
+    </div>
+    <section class="card list" id="checklistContainer" role="group" aria-label="Daily checklist"></section>
+
+    <form class="card add" id="addCustomTaskForm" autocomplete="off">
+      <input type="text" id="customTaskInput" placeholder="Add a goal, e.g. Read 10 pages" aria-label="New custom goal" enterkeyhint="done">
+      <button type="submit" aria-label="Add goal"><i data-lucide="plus"></i></button>
+    </form>
+
+    <p class="foot">“Never miss twice. If an emergency strikes, swap the slot—don't cancel the system.”<small>Built for spiritual growth, deep work & physical vitality</small></p>
+  </div>
+
+  <!-- ================= PLAN ================= -->
+  <div class="view" id="view-plan" hidden>
+    <div class="titleblock">
+      <p class="eyebrow">This week</p>
+      <h1 id="selectedDayTitle">Today's Blueprint</h1>
+    </div>
+
+    <div class="seg" id="daySeg" role="tablist" aria-label="Day of week">
+      <div class="seg-thumb" id="segThumb"></div>
+    </div>
+
+    <div class="legend">
+      <span style="--c:var(--gold)"><i></i>Fixed spiritual anchors</span>
+      <span style="--c:var(--violet)"><i></i>Modular daytime blocks</span>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" onclick="downloadICS()"><i data-lucide="calendar-plus"></i>Export to .ICS</button>
+      <button class="btn" onclick="openAutomationModal()"><i data-lucide="smartphone"></i>Phone Routines</button>
+    </div>
+
+    <section class="timeline" id="scheduleTimeline" aria-label="Schedule"></section>
+
+    <p class="foot">“Never miss twice. If an emergency strikes, swap the slot—don't cancel the system.”</p>
+  </div>
+
+</main>
+
+<nav class="nav" aria-label="Sections">
+  <button id="tab-today" aria-selected="true" onclick="switchView('today')"><i data-lucide="sun"></i>Today</button>
+  <button id="tab-plan" aria-selected="false" onclick="switchView('plan')"><i data-lucide="calendar-days"></i>Plan</button>
+</nav>
+
+<div class="toast" id="toast" role="status"></div>
+
+<!-- Swap sheet -->
+<div id="swapModal" class="sheet" aria-hidden="true">
+  <div class="scrim" onclick="closeSwapModal()"></div>
+  <div class="panel" role="dialog" aria-modal="true" aria-labelledby="swapTitle">
+    <div class="grab"></div>
+    <div class="panel-head">
+      <h3 id="swapTitle"><span class="sq" style="--c:var(--cyan)"><i data-lucide="shuffle"></i></span>Dynamic Slot Swap</h3>
+      <button class="x-btn" onclick="closeSwapModal()" aria-label="Close"><i data-lucide="x"></i></button>
+    </div>
+    <p class="lead">Did a hotel call, family request, or urgent task disrupt your plan? Swap your current slot with another modular block or replace it with a postponed task so your momentum remains intact.</p>
+    <div class="field">
+      <label for="swapTargetSelect">Choose block to modify</label>
+      <div class="select"><select id="swapTargetSelect"></select></div>
+    </div>
+    <div class="field">
+      <label for="swapReplacementSelect">Replace with this task</label>
+      <div class="select">
+        <select id="swapReplacementSelect">
+          <option value="Hotel Admin & Supervisor Resolution">Hotel Admin & Staff Support</option>
+          <option value="Data Science Deep Study Block">Data Science Study</option>
+          <option value="Vibe Coding & App Architecture">Vibe Coding / App Oversight</option>
+          <option value="Jesus is Our Solace Manual Writing">JIOS Manual Writing</option>
+          <option value="NGO Board Document Finalization">NGO Board Document</option>
+          <option value="YPC Social Media Creative Batch">YPC Content Creation (Sat Batch)</option>
+          <option value="Reading Physical Books">Book Reading & Reflection</option>
+          <option value="Church Video Editing Project">Church Video Editing</option>
+          <option value="DeepSeek & Chess Cooldown">DeepSeek + Chess Session</option>
+          <option value="Rest & Hydration Break">Strategic Nap / Fasting Rest</option>
+        </select>
+      </div>
+    </div>
+    <div class="sheet-actions">
+      <button class="cta" onclick="applySwap()"><i data-lucide="check"></i>Apply Swap</button>
+      <button class="ghost" onclick="closeSwapModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Phone routines sheet -->
+<div id="autoModal" class="sheet" aria-hidden="true">
+  <div class="scrim" onclick="closeAutomationModal()"></div>
+  <div class="panel" role="dialog" aria-modal="true" aria-labelledby="autoTitle">
+    <div class="grab"></div>
+    <div class="panel-head">
+      <h3 id="autoTitle"><span class="sq" style="--c:var(--violet)"><i data-lucide="smartphone"></i></span>Phone Routines</h3>
+      <button class="x-btn" onclick="closeAutomationModal()" aria-label="Close"><i data-lucide="x"></i></button>
+    </div>
+    <p class="lead">Samsung Modes &amp; Google Routine triggers. Configure your phone's built-in <strong>Modes and Routines</strong> (Samsung) or <strong>Google Assistant Routines</strong> with these exact triggers so you don't rely on will power:</p>
+    <div class="routines">
+      <div class="routine" style="--c:var(--gold)">
+        <span class="sq" style="--c:var(--gold)"><i data-lucide="activity"></i></span>
+        <div class="routine-main"><div class="routine-top"><b>05:00 AM — Physical Awakening</b><span class="chip">Daily</span></div>
+          <p><strong>If:</strong> Time is 05:00 AM</p>
+          <p><strong>Then:</strong> Turn brightness to 70%, turn off Do Not Disturb, launch Workout playlist, open fitness tracker.</p></div>
+      </div>
+      <div class="routine" style="--c:var(--cyan)">
+        <span class="sq" style="--c:var(--cyan)"><i data-lucide="book-open"></i></span>
+        <div class="routine-main"><div class="routine-top"><b>06:00 AM — Devotion & Sacred Space</b><span class="chip">Daily</span></div>
+          <p><strong>If:</strong> Time is 06:00 AM</p>
+          <p><strong>Then:</strong> Turn Do Not Disturb ON (allow hotel supervisor calls only), launch Bible app.</p></div>
+      </div>
+      <div class="routine" style="--c:var(--mint)">
+        <span class="sq" style="--c:var(--mint)"><i data-lucide="battery-charging"></i></span>
+        <div class="routine-main"><div class="routine-top"><b>01:30 PM — Midday Sleep Reset (90 min)</b><span class="chip">Mon - Fri</span></div>
+          <p><strong>If:</strong> Time is 01:30 PM</p>
+          <p><strong>Then:</strong> Turn ON Do Not Disturb, mute all media, set timer/alarm for 03:00 PM.</p></div>
+      </div>
+      <div class="routine" style="--c:var(--rose)">
+        <span class="sq" style="--c:var(--rose)"><i data-lucide="moon"></i></span>
+        <div class="routine-main"><div class="routine-top"><b>12:00 AM — Midnight Watch Altar</b><span class="chip">Nightly</span></div>
+          <p><strong>If:</strong> Time is 12:00 AM</p>
+          <p><strong>Then:</strong> Eye comfort shield ON, ringtone silent, turn on soft warm ambient light.</p></div>
+      </div>
+    </div>
+    <div class="sheet-actions"><button class="cta" onclick="closeAutomationModal()">Got It</button></div>
+  </div>
+</div>
+
+<script>
+// ---------- helpers ----------
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function parseJSON(s, fb) { try { return s ? JSON.parse(s) : fb; } catch (e) { return fb; } }
+function icons() { try { if (window.lucide) lucide.createIcons(); } catch (e) {} }
+function haptic(ms) { try { if (navigator.vibrate) navigator.vibrate(ms || 8); } catch (e) {} }
+let toastTimer;
+function toast(msg) {
+  const t = $('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+const toMin = (hhmm) => { const [h, m] = hhmm.split(':').map(Number); return h * 60 + m; };
+function fmtDur(mins) { const h = Math.floor(mins / 60), m = mins % 60; return h ? (m ? `${h}h ${m}m` : `${h}h`) : `${m}m`; }
+const TAG_COLORS = {
+  Spiritual: 'gold', Church: 'gold', Mission: 'gold',
+  'Deep Work': 'violet', Work: 'violet', Study: 'violet', Project: 'violet', Class: 'violet', 'YPC Batch': 'violet', Creative: 'violet', Mastery: 'violet', Tech: 'violet',
+  Admin: 'cyan', Habit: 'cyan', Business: 'cyan', Intellect: 'cyan',
+  Rest: 'slate', Recovery: 'slate', Physical: 'mint', Routine: 'zinc', Custom: 'zinc', Adjusted: 'rose'
+};
+const tagColor = t => `var(--${TAG_COLORS[t] || 'zinc'})`;
+
+// ---------- Quotes Collection ----------
+const quotes = [
+  { quote: "You do not rise to the level of your goals. You fall to the level of your systems.", author: "James Clear (Atomic Habits)", category: "Systems & Consistency" },
+  { quote: "Every action you take is a vote for the type of person you wish to become.", author: "James Clear", category: "Identity & Habits" },
+  { quote: "Watch and pray that you may not enter into temptation. The spirit indeed is willing, but the flesh is weak.", author: "Matthew 26:41", category: "Spiritual Tenacity" },
+  { quote: "Deep work is the ability to focus without distraction on a cognitively demanding task.", author: "Cal Newport", category: "Data Science & Mastery" },
+  { quote: "Discipline is choosing between what you want now and what you want most.", author: "Abraham Lincoln", category: "Executive Discipline" },
+  { quote: "Do you not know that in a race all the runners run, but only one receives the prize? So run that you may obtain it.", author: "1 Corinthians 9:24", category: "Physical & Spiritual Stamina" },
+  { quote: "Small disciplines repeated with consistency every day lead to great achievements gained slowly over time.", author: "John C. Maxwell", category: "Consistency" }
+];
+let currentQuoteIndex = 0;
+
+// ---------- Core Master Routine Blueprint ----------
+// Types: 'fixed' (spiritual/anchor) vs 'modular' (can be swapped)
+const baseSchedule = {
+  defaultMonWed: [
+    { id: "b1", start: "00:00", end: "02:00", title: "Midnight Prayer Watch & Meditation", type: "fixed", tag: "Spiritual", icon: "moon" },
+    { id: "b2", start: "02:00", end: "05:00", title: "Sleep Core Block II (3 hrs)", type: "fixed", tag: "Rest", icon: "bed" },
+    { id: "b3", start: "05:00", end: "06:00", title: "Physical Activation (Gym / Workout)", type: "fixed", tag: "Physical", icon: "activity" },
+    { id: "b4", start: "06:00", end: "07:00", title: "Morning Devotion & Bible Study", type: "fixed", tag: "Spiritual", icon: "book-open" },
+    { id: "b5", start: "07:00", end: "08:30", title: "Shower, Prep & Fasting Window Start", type: "fixed", tag: "Routine", icon: "sun" },
+    { id: "b6", start: "08:30", end: "10:30", title: "Data Science Deep Study Block", type: "modular", tag: "Deep Work", icon: "cpu" },
+    { id: "b7", start: "10:30", end: "12:00", title: "Vibe Coding & App Architecture Oversight", type: "modular", tag: "Work", icon: "code" },
+    { id: "b8", start: "12:00", end: "12:30", title: "Midday Altar Prayer", type: "fixed", tag: "Spiritual", icon: "cross" },
+    { id: "b9", start: "12:30", end: "13:30", title: "Jesus is Our Solace Manual Writing", type: "modular", tag: "Project", icon: "file-text" },
+    { id: "b10", start: "13:30", end: "15:00", title: "Restorative Midday Nap (90 min)", type: "fixed", tag: "Rest", icon: "battery-charging" },
+    { id: "b11", start: "15:00", end: "16:30", title: "NGO Board Document & Hotel Admin", type: "modular", tag: "Admin", icon: "briefcase" },
+    { id: "b12", start: "16:30", end: "18:00", title: "DeepSeek & Chess Decompression", type: "modular", tag: "Habit", icon: "play" },
+    { id: "b13", start: "18:00", end: "21:00", title: "Dinner / Fast Break & Personal Rest", type: "fixed", tag: "Routine", icon: "coffee" },
+    { id: "b14", start: "21:00", end: "22:00", title: "Jesus is Our Solace Prayer Meeting", type: "fixed", tag: "Spiritual", icon: "users" },
+    { id: "b15", start: "22:00", end: "24:00", title: "Wind Down & Sleep Core Block I", type: "fixed", tag: "Rest", icon: "shield" }
+  ],
+  tueThu: [
+    { id: "t1", start: "00:00", end: "02:00", title: "Midnight Prayer Watch & Meditation", type: "fixed", tag: "Spiritual", icon: "moon" },
+    { id: "t2", start: "02:00", end: "05:00", title: "Sleep Core Block II (3 hrs)", type: "fixed", tag: "Rest", icon: "bed" },
+    { id: "t3", start: "05:00", end: "06:00", title: "Physical Activation (Gym / Workout)", type: "fixed", tag: "Physical", icon: "activity" },
+    { id: "t4", start: "06:00", end: "07:00", title: "Morning Devotion & Bible Study", type: "fixed", tag: "Spiritual", icon: "book-open" },
+    { id: "t5", start: "07:00", end: "08:30", title: "Shower, Prep & Daily Focus Setup", type: "fixed", tag: "Routine", icon: "sun" },
+    { id: "t6", start: "08:30", end: "10:30", title: "Data Science Deep Study Block", type: "modular", tag: "Deep Work", icon: "cpu" },
+    { id: "t7", start: "10:30", end: "12:00", title: "Vibe Coding & App Architecture Oversight", type: "modular", tag: "Work", icon: "code" },
+    { id: "t8", start: "12:00", end: "12:30", title: "Midday Altar Prayer", type: "fixed", tag: "Spiritual", icon: "cross" },
+    { id: "t9", start: "12:30", end: "13:30", title: "Book Reading & Active Summaries", type: "modular", tag: "Study", icon: "book" },
+    { id: "t10", start: "13:30", end: "15:00", title: "Restorative Midday Nap (90 min)", type: "fixed", tag: "Rest", icon: "battery-charging" },
+    { id: "t11", start: "15:00", end: "16:45", title: "Church Video Editing & Hotel Follow-ups", type: "modular", tag: "Creative", icon: "video" },
+    { id: "t12", start: "17:30", end: "20:00", title: "Church Midweek Service (5:30 - 8:00 PM)", type: "fixed", tag: "Church", icon: "church" },
+    { id: "t13", start: "20:00", end: "21:00", title: "Commute & Light Refreshment", type: "fixed", tag: "Routine", icon: "coffee" },
+    { id: "t14", start: "21:00", end: "22:00", title: "Jesus is Our Solace Prayer Meeting", type: "fixed", tag: "Spiritual", icon: "users" },
+    { id: "t15", start: "22:00", end: "24:00", title: "Wind Down & Sleep Core Block I", type: "fixed", tag: "Rest", icon: "shield" }
+  ],
+  friday: [
+    { id: "f1", start: "00:00", end: "02:00", title: "Midnight Prayer Watch & Meditation", type: "fixed", tag: "Spiritual", icon: "moon" },
+    { id: "f2", start: "02:00", end: "05:00", title: "Sleep Core Block II (3 hrs)", type: "fixed", tag: "Rest", icon: "bed" },
+    { id: "f3", start: "05:00", end: "06:00", title: "Physical Activation (Gym / Workout)", type: "fixed", tag: "Physical", icon: "activity" },
+    { id: "f4", start: "06:00", end: "07:00", title: "Morning Devotion & Bible Study", type: "fixed", tag: "Spiritual", icon: "book-open" },
+    { id: "f5", start: "07:00", end: "08:30", title: "Shower, Prep & Fasting Window", type: "fixed", tag: "Routine", icon: "sun" },
+    { id: "f6", start: "08:30", end: "10:30", title: "Data Science Deep Study Block", type: "modular", tag: "Deep Work", icon: "cpu" },
+    { id: "f7", start: "10:30", end: "12:00", title: "Vibe Coding & App Architecture Oversight", type: "modular", tag: "Work", icon: "code" },
+    { id: "f8", start: "12:00", end: "12:30", title: "Midday Altar Prayer", type: "fixed", tag: "Spiritual", icon: "cross" },
+    { id: "f9", start: "12:30", end: "13:30", title: "NGO Board Document Final Polish", type: "modular", tag: "Project", icon: "file-text" },
+    { id: "f10", start: "13:30", end: "15:00", title: "Restorative Midday Nap (90 min)", type: "fixed", tag: "Rest", icon: "battery-charging" },
+    { id: "f11", start: "15:00", end: "16:00", title: "Hotel Supervisor Weekly Review & Admin", type: "modular", tag: "Admin", icon: "briefcase" },
+    { id: "f12", start: "16:30", end: "18:30", title: "Friday Intercessory Prayer (4:30 - 6:30 PM)", type: "fixed", tag: "Spiritual", icon: "flame" },
+    { id: "f13", start: "19:00", end: "21:00", title: "Break Fast & Rest Before Vigil", type: "fixed", tag: "Routine", icon: "coffee" },
+    { id: "f14", start: "21:00", end: "22:00", title: "Jesus is Our Solace Prayer Meeting", type: "fixed", tag: "Spiritual", icon: "users" },
+    { id: "f15", start: "23:00", end: "24:00", title: "Night Vigil / Spiritual Watch (Optional Sleep)", type: "fixed", tag: "Spiritual", icon: "shield" }
+  ],
+  saturday: [
+    { id: "s1", start: "00:00", end: "02:00", title: "Midnight Prayer Watch / Vigil", type: "fixed", tag: "Spiritual", icon: "moon" },
+    { id: "s2", start: "02:00", end: "05:00", title: "Sleep Core Block II", type: "fixed", tag: "Rest", icon: "bed" },
+    { id: "s3", start: "05:00", end: "06:00", title: "Cardio Walk / Mobility Warmup", type: "fixed", tag: "Physical", icon: "activity" },
+    { id: "s4", start: "06:00", end: "07:00", title: "Morning Devotion & Bible Study", type: "fixed", tag: "Spiritual", icon: "book-open" },
+    { id: "s5", start: "08:00", end: "10:30", title: "YPC Content Theme & 3-Post Creation (Mon/Wed/Fri)", type: "modular", tag: "YPC Batch", icon: "feather" },
+    { id: "s6", start: "10:30", end: "12:30", title: "Saturday Class (Twice monthly) or Project Mgmt Prep", type: "modular", tag: "Class", icon: "graduation-cap" },
+    { id: "s7", start: "12:30", end: "13:30", title: "Church Video Final Cut / Export", type: "modular", tag: "Creative", icon: "video" },
+    { id: "s8", start: "13:30", end: "15:30", title: "Lunch, Relax & Chess / DeepSeek", type: "modular", tag: "Habit", icon: "play" },
+    { id: "s9", start: "16:00", end: "18:00", title: "Street & Community Evangelism (4:00 - 6:00 PM)", type: "fixed", tag: "Mission", icon: "send" },
+    { id: "s10", start: "18:30", end: "21:00", title: "Family Time & Sunday Preparation", type: "fixed", tag: "Routine", icon: "heart" },
+    { id: "s11", start: "21:00", end: "22:00", title: "Jesus is Our Solace Prayer Meeting", type: "fixed", tag: "Spiritual", icon: "users" },
+    { id: "s12", start: "22:00", end: "24:00", title: "Early Sleep for Sunday 5:30 AM Call", type: "fixed", tag: "Rest", icon: "bed" }
+  ],
+  sunday: [
+    { id: "u1", start: "04:30", end: "05:15", title: "Wake Up, Quick Shower & Prayer", type: "fixed", tag: "Routine", icon: "sun" },
+    { id: "u2", start: "05:30", end: "23:00", title: "Church Service & Ministerial Engagements", type: "fixed", tag: "Church", icon: "church" },
+    { id: "u3", start: "23:00", end: "24:00", title: "Return Home, Quick Meal & Deep Sleep", type: "fixed", tag: "Rest", icon: "moon" }
+  ]
+};
+
+// Default daily habits for the checklist
+const initialChecklist = [
+  { id: "c1", label: "05:00 AM Physical Activation / Gym", done: false, category: "Physical" },
+  { id: "c2", label: "06:00 AM Devotion & Bible Study (1 hour)", done: false, category: "Spiritual" },
+  { id: "c3", label: "Data Science 2-Hour Deep Focus", done: false, category: "Mastery" },
+  { id: "c4", label: "Vibe Coding: Verify AI App Progress", done: false, category: "Tech" },
+  { id: "c5", label: "12:00 PM Midday Altar Prayer", done: false, category: "Spiritual" },
+  { id: "c6", label: "01:30 PM Midday Sleep Recovery (90 min)", done: false, category: "Recovery" },
+  { id: "c7", label: "Hotel Check-in & Supervisor Alignment", done: false, category: "Business" },
+  { id: "c8", label: "Daily DeepSeek + Chess Cooldown", done: false, category: "Intellect" },
+  { id: "c9", label: "09:00 PM Jesus is Our Solace Prayer", done: false, category: "Spiritual" },
+  { id: "c10", label: "12:00 AM Midnight Prayer Watch & Meditation", done: false, category: "Spiritual" }
+];
+
+// State Variables
+let selectedDay = new Date().getDay(); // 0 = Sun, 1 = Mon ...
+let currentSchedule = [];
+let checklistItems = [];
+
+// Local Storage Keys (unchanged, so your saved progress carries over)
+const CHECKLIST_STORAGE_KEY = 'apex_routine_checklist_v1';
+const OVERRIDE_STORAGE_KEY = 'apex_schedule_overrides_v1';
+
+// ---------- Mascot (hand-drawn SVG, mood follows progress) ----------
+function mascotSVG(p) {
+  const ink = '#2a1a0c';
+  let eyes, mouth, extra = '';
+  if (p >= 100) {
+    const star = (x, y) => `<path d="M${x} ${y-7} l2.3 4.7 4.7 2.3 -4.7 2.3 -2.3 4.7 -2.3 -4.7 -4.7 -2.3 4.7 -2.3z" fill="${ink}"/>`;
+    eyes = star(30, 44) + star(50, 44);
+    mouth = `<path d="M33 52 q7 11 14 0z" fill="${ink}"/><path d="M36.5 57 q3.5 2.5 7 0 q-3.5 -2.2 -7 0z" fill="#f78f8f"/>`;
+    extra = `<path d="M8 22 v8 M4 26 h8" stroke="#e5b76b" stroke-width="2" stroke-linecap="round"/><path d="M71 14 v6 M68 17 h6" stroke="#a78bfa" stroke-width="2" stroke-linecap="round"/><circle cx="72" cy="40" r="1.8" fill="#67e8f9"/>`;
+  } else if (p >= 50) {
+    eyes = `<path d="M25 46 q5 -7 10 0 M45 46 q5 -7 10 0" fill="none" stroke="${ink}" stroke-width="2.8" stroke-linecap="round"/>`;
+    mouth = `<path d="M33 52 q7 11 14 0z" fill="${ink}"/><path d="M36.5 57 q3.5 2.5 7 0 q-3.5 -2.2 -7 0z" fill="#f78f8f"/>`;
+  } else if (p > 0) {
+    eyes = `<circle cx="31" cy="45" r="3.2" fill="${ink}"/><circle cx="49" cy="45" r="3.2" fill="${ink}"/><circle cx="32.2" cy="43.8" r="1" fill="#fff"/><circle cx="50.2" cy="43.8" r="1" fill="#fff"/>`;
+    mouth = `<path d="M34 53 q6 6 12 0" fill="none" stroke="${ink}" stroke-width="2.6" stroke-linecap="round"/>`;
+  } else {
+    eyes = `<path d="M25 45 q5 5 10 0 M45 45 q5 5 10 0" fill="none" stroke="${ink}" stroke-width="2.8" stroke-linecap="round"/>`;
+    mouth = `<path d="M37 55 h6" stroke="${ink}" stroke-width="2.6" stroke-linecap="round"/>`;
+    extra = `<text x="60" y="26" font-size="11" font-weight="700" fill="#a78bfa" font-family="system-ui,sans-serif">z</text><text x="67" y="16" font-size="8" font-weight="700" fill="#a78bfa" opacity=".7" font-family="system-ui,sans-serif">z</text>`;
+  }
+  return `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="mBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6d896"/><stop offset="1" stop-color="#dc9f45"/></linearGradient>
+      <linearGradient id="mFlame" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0c4"/><stop offset="1" stop-color="#f3c066"/></linearGradient>
+    </defs>
+    <path d="M40 3 C47 12 55 17 51 26 C49 31 31 31 29 26 C25 17 34 12 40 3Z" fill="url(#mFlame)"/>
+    <circle cx="40" cy="47" r="27" fill="url(#mBody)"/>
+    <ellipse cx="29" cy="36" rx="8" ry="4.5" fill="#fff" opacity=".22" transform="rotate(-24 29 36)"/>
+    <circle cx="23.5" cy="52" r="4.2" fill="#f78f8f" opacity=".42"/><circle cx="56.5" cy="52" r="4.2" fill="#f78f8f" opacity=".42"/>
+    ${eyes}${mouth}${extra}
+  </svg>`;
+}
+
+// ---------- Initialize ----------
+function init() {
+  buildDaySeg();
+  loadChecklist();
+  setupDayTabs();
+  loadDaySchedule(selectedDay);
+  rotateQuote(0);
+  buildDots();
+  updateClock();
+  setInterval(updateClock, 1000);
+  setInterval(nextQuote, 30000); // 30-sec quote cycle
+  icons();
+
+  $('addCustomTaskForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const input = $('customTaskInput');
+    if (input.value.trim()) {
+      checklistItems.push({ id: 'custom_' + Date.now(), label: input.value.trim(), done: false, category: "Custom" });
+      input.value = '';
+      saveChecklist();
+      renderChecklist();
+      haptic(10);
+    }
+  });
+
+  $('resetChecklistBtn').addEventListener('click', function () {
+    checklistItems.forEach(item => item.done = false);
+    saveChecklist();
+    renderChecklist();
+    toast('Checklist reset');
+  });
+
+  $('nextQuoteBtn').addEventListener('click', (e) => { e.stopPropagation(); nextQuote(); });
+  setupQuoteSwipe();
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSwapModal(); closeAutomationModal(); } });
+}
+
+// ---------- Tabs ----------
+let planScrolled = false;
+function switchView(name) {
+  const plan = name === 'plan';
+  $('view-today').hidden = plan;
+  $('view-plan').hidden = !plan;
+  $('tab-today').setAttribute('aria-selected', String(!plan));
+  $('tab-plan').setAttribute('aria-selected', String(plan));
+  window.scrollTo({ top: 0 });
+  if (plan && !planScrolled) {
+    planScrolled = true;
+    setTimeout(() => { const n = document.querySelector('.tl-item.now'); if (n) n.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 350);
+  }
+}
+
+// ---------- Clock & Date ----------
+function updateClock() {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  $('liveClockDisplay').textContent = timeStr;
+
+  const options = { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' };
+  $('currentDateDisplay').textContent = now.toLocaleDateString(undefined, options);
+
+  const h = now.getHours();
+  $('greeting').textContent = h < 5 ? 'Midnight watch' : h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : h < 21 ? 'Good evening' : 'Good night';
+  $('activeNowCard').dataset.period = (h >= 5 && h < 7) ? 'dawn' : (h >= 7 && h < 17) ? 'day' : (h >= 17 && h < 20) ? 'dusk' : 'night';
+
+  highlightActiveSlot(now);
+  markTimeline(now);
+}
+
+// ---------- Quotes Logic ----------
+function rotateQuote(index, dir) {
+  currentQuoteIndex = index % quotes.length;
+  const q = quotes[currentQuoteIndex];
+  $('quoteText').textContent = `"${q.quote}"`;
+  $('quoteAuthor').textContent = `— ${q.author}`;
+  $('quoteCategory').textContent = q.category;
+  const body = $('quoteBody');
+  body.classList.remove('in-l', 'in-r'); void body.offsetWidth;
+  if (dir) body.classList.add(dir > 0 ? 'in-l' : 'in-r');
+  document.querySelectorAll('#quoteDots i').forEach((d, i) => d.classList.toggle('on', i === currentQuoteIndex));
+}
+function nextQuote() { currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length; rotateQuote(currentQuoteIndex, 1); }
+function prevQuote() { currentQuoteIndex = (currentQuoteIndex - 1 + quotes.length) % quotes.length; rotateQuote(currentQuoteIndex, -1); }
+function buildDots() {
+  $('quoteDots').innerHTML = quotes.map((_, i) => `<i class="${i === currentQuoteIndex ? 'on' : ''}"></i>`).join('');
+}
+function setupQuoteSwipe() {
+  const card = $('quoteCard');
+  let x0 = null, y0 = 0;
+  card.addEventListener('pointerdown', e => { if (e.target.closest('button')) return; x0 = e.clientX; y0 = e.clientY; });
+  card.addEventListener('pointerup', e => {
+    if (x0 === null) return;
+    const dx = e.clientX - x0, dy = e.clientY - y0; x0 = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.2) { dx < 0 ? nextQuote() : prevQuote(); haptic(6); }
+  });
+  card.addEventListener('pointercancel', () => { x0 = null; });
+  card.addEventListener('keydown', e => { if (e.key === 'ArrowRight') nextQuote(); if (e.key === 'ArrowLeft') prevQuote(); });
+}
+
+// ---------- Schedule Mapping by Day ----------
+function getScheduleTemplateForDay(dayIndex) {
+  if (dayIndex === 0) return baseSchedule.sunday;
+  if (dayIndex === 6) return baseSchedule.saturday;
+  if (dayIndex === 5) return baseSchedule.friday;
+  if (dayIndex === 2 || dayIndex === 4) return baseSchedule.tueThu;
+  return baseSchedule.defaultMonWed;
+}
+
+function loadDaySchedule(dayIndex) {
+  const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  $('selectedDayTitle').textContent = `${dayNames[dayIndex]}'s Blueprint`;
+
+  // Check for user-swapped overrides in LocalStorage
+  const savedOverrides = parseJSON(lsGet(OVERRIDE_STORAGE_KEY), {});
+  const base = getScheduleTemplateForDay(dayIndex);
+
+  if (savedOverrides[dayIndex]) {
+    currentSchedule = savedOverrides[dayIndex];
+  } else {
+    currentSchedule = JSON.parse(JSON.stringify(base));
+  }
+
+  renderScheduleTimeline();
+  populateSwapTargetSelect();
+}
+
+const DAY_LETTERS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+function buildDaySeg() {
+  const seg = $('daySeg');
+  const today = new Date();
+  const start = new Date(today); start.setDate(today.getDate() - today.getDay());
+  const frag = DAY_LETTERS.map((n, d) => {
+    const dt = new Date(start); dt.setDate(start.getDate() + d);
+    return `<button class="day-tab${d === today.getDay() ? ' today' : ''}" role="tab" data-day="${d}" aria-selected="false"><span class="dn">${n}</span><span class="num">${dt.getDate()}</span></button>`;
+  }).join('');
+  seg.insertAdjacentHTML('beforeend', frag);
+}
+function setupDayTabs() {
+  const tabs = document.querySelectorAll('.day-tab');
+  const select = (d) => {
+    tabs.forEach(t => t.setAttribute('aria-selected', String(parseInt(t.dataset.day) === d)));
+    $('segThumb').style.setProperty('--i', d);
+  };
+  select(selectedDay);
+  tabs.forEach(tab => {
+    const d = parseInt(tab.dataset.day);
+    tab.addEventListener('click', () => {
+      select(d);
+      selectedDay = d;
+      loadDaySchedule(selectedDay);
+      haptic(6);
+    });
+  });
+}
+
+function renderScheduleTimeline() {
+  const container = $('scheduleTimeline');
+  container.innerHTML = '';
+
+  currentSchedule.forEach((item) => {
+    const isFixed = item.type === 'fixed';
+    const swapped = item.title.startsWith('[SWAPPED] ');
+    const title = swapped ? item.title.slice(10) : item.title;
+    const endMin = item.end === '24:00' ? 1440 : toMin(item.end);
+    const dur = fmtDur(endMin - toMin(item.start));
+    const col = isFixed ? 'var(--gold)' : 'var(--violet)';
+    const el = document.createElement('div');
+    el.id = `block-${item.id}`;
+    el.className = 'tl-item';
+    el.style.setProperty('--c', col);
+    el.innerHTML = `
+      <div class="tl-rail"><i class="tl-dot"></i></div>
+      <div class="tl-card ${isFixed ? '' : 'mod'}">
+        <span class="sq" style="--c:${tagColor(item.tag)}"><i data-lucide="${esc(item.icon)}"></i></span>
+        <div class="tl-body">
+          <div class="tl-time">${item.start} – ${item.end}<em>${dur}</em></div>
+          <p class="tl-title">${esc(title)}</p>
+          <div class="tl-meta">
+            <span class="chip" style="--c:${tagColor(item.tag)}">${esc(item.tag)}</span>
+            <span class="chip now-tag">Now</span>
+            ${isFixed ? '<span class="anchor">Fixed Anchor</span>' : ''}
+          </div>
+        </div>
+        ${!isFixed ? `<button class="swap-btn" onclick="quickSwapSingle('${item.id}')" title="Swap this block" aria-label="Swap this block"><i data-lucide="arrow-left-right"></i></button>` : ''}
+      </div>`;
+    container.appendChild(el);
+  });
+
+  icons();
+  markTimeline(new Date());
+}
+
+// Marks the live block and fades finished ones (only when viewing today)
+function markTimeline(date) {
+  const isToday = selectedDay === date.getDay();
+  const cur = date.getHours() * 60 + date.getMinutes();
+  let nowFound = false;
+  currentSchedule.forEach(item => {
+    const el = $(`block-${item.id}`);
+    if (!el) return;
+    const s = toMin(item.start), e = item.end === '24:00' ? 1440 : toMin(item.end);
+    const isNow = isToday && !nowFound && cur >= s && cur < e;
+    if (isNow) nowFound = true;
+    el.classList.toggle('now', isNow);
+    el.classList.toggle('past', isToday && cur >= e);
+  });
+}
+
+function highlightActiveSlot(date) {
+  const currentH = date.getHours();
+  const currentM = date.getMinutes();
+  const currentMinutes = currentH * 60 + currentM;
+
+  let activeItem = null;
+
+  for (const item of currentSchedule) {
+    const [sH, sM] = item.start.split(':').map(Number);
+    let [eH, eM] = item.end.split(':').map(Number);
+    if (item.end === "24:00") { eH = 24; eM = 0; }
+
+    const startMin = sH * 60 + sM;
+    const endMin = eH * 60 + eM;
+
+    if (currentMinutes >= startMin && currentMinutes < endMin) {
+      activeItem = item;
+      break;
+    }
+  }
+
+  const titleEl = $('currentTaskTitle');
+  const subEl = $('currentTaskSub');
+  const timeEl = $('currentTaskTime');
+
+  if (activeItem) {
+    titleEl.textContent = activeItem.title;
+    timeEl.textContent = `${activeItem.start} – ${activeItem.end}`;
+    subEl.textContent = activeItem.type === 'fixed'
+      ? 'Non-negotiable anchor block. Guard this focus.'
+      : 'Modular work block. Tap Swap if urgently disrupted.';
+  } else {
+    titleEl.textContent = "Night Transition / Personal Time";
+    timeEl.textContent = '';
+    subEl.textContent = "Rest, hydrate, and prepare for the next prayer watch.";
+  }
+}
+
+// ---------- Dynamic Swap Logic ----------
+function openSheet(id) { const s = $(id); s.classList.add('open'); s.setAttribute('aria-hidden', 'false'); }
+function closeSheet(id) { const s = $(id); s.classList.remove('open'); s.setAttribute('aria-hidden', 'true'); }
+function openSwapModal() { populateSwapTargetSelect(); openSheet('swapModal'); icons(); }
+function closeSwapModal() { closeSheet('swapModal'); }
+
+function populateSwapTargetSelect() {
+  const select = $('swapTargetSelect');
+  select.innerHTML = '';
+  currentSchedule.forEach(item => {
+    const opt = document.createElement('option');
+    opt.value = item.id;
+    opt.textContent = `${item.start} - ${item.end}: ${item.title} (${item.type.toUpperCase()})`;
+    select.appendChild(opt);
+  });
+}
+
+function quickSwapSingle(id) {
+  openSwapModal();
+  $('swapTargetSelect').value = id;
+}
+
+function applySwap() {
+  const targetId = $('swapTargetSelect').value;
+  const newTitle = $('swapReplacementSelect').value;
+
+  const idx = currentSchedule.findIndex(i => i.id === targetId);
+  if (idx !== -1) {
+    currentSchedule[idx].title = `[SWAPPED] ${newTitle}`;
+    currentSchedule[idx].tag = "Adjusted";
+
+    // Save override for today
+    const savedOverrides = parseJSON(lsGet(OVERRIDE_STORAGE_KEY), {});
+    savedOverrides[selectedDay] = currentSchedule;
+    lsSet(OVERRIDE_STORAGE_KEY, JSON.stringify(savedOverrides));
+
+    renderScheduleTimeline();
+    populateSwapTargetSelect();
+    updateClock();
+    closeSwapModal();
+    toast('Slot swapped');
+    haptic(12);
+  }
+}
+
+// ---------- Automation Modal ----------
+function openAutomationModal() { openSheet('autoModal'); icons(); }
+function closeAutomationModal() { closeSheet('autoModal'); }
+
+// ---------- Interactive Checklist & Progress ----------
+function loadChecklist() {
+  const stored = parseJSON(lsGet(CHECKLIST_STORAGE_KEY), null);
+  checklistItems = Array.isArray(stored) ? stored : JSON.parse(JSON.stringify(initialChecklist));
+  renderChecklist();
+}
+
+function saveChecklist() {
+  lsSet(CHECKLIST_STORAGE_KEY, JSON.stringify(checklistItems));
+}
+
+function toggleTask(id) {
+  const item = checklistItems.find(i => i.id === id);
+  if (!item) return;
+  item.done = !item.done;
+  saveChecklist();
+  // Update the row in place so the strike-through and tick can animate
+  const row = document.querySelector(`.row[data-id="${CSS.escape(id)}"]`);
+  if (row) {
+    row.classList.toggle('done', item.done);
+    row.setAttribute('aria-checked', String(item.done));
+    row.classList.remove('pop');
+    if (item.done) { void row.offsetWidth; row.classList.add('pop'); }
+  }
+  haptic(item.done ? 14 : 6);
+  updateProgress();
+}
+
+function renderChecklist() {
+  const container = $('checklistContainer');
+  container.innerHTML = '';
+  checklistItems.forEach(item => {
+    const div = document.createElement('div');
+    div.className = `row${item.done ? ' done' : ''}`;
+    div.dataset.id = item.id;
+    div.setAttribute('role', 'checkbox');
+    div.setAttribute('aria-checked', String(item.done));
+    div.tabIndex = 0;
+    div.onclick = () => toggleTask(item.id);
+    div.onkeydown = (e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleTask(item.id); } };
+    div.innerHTML = `
+      <span class="check"><svg viewBox="0 0 28 28" aria-hidden="true"><circle class="ring-c" cx="14" cy="14" r="12.5"/><path class="tick" d="M8.5 14.5l4 4 7-8.5"/></svg></span>
+      <span class="row-main">
+        <span class="label">${esc(item.label)}</span>
+        <span class="cap" style="--c:${tagColor(item.category)}">${esc(item.category)}</span>
+      </span>`;
+    container.appendChild(div);
+  });
+  updateProgress();
+}
+
+let lastMood = null;
+function updateProgress() {
+  const total = checklistItems.length;
+  const completed = checklistItems.filter(i => i.done).length;
+  const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+  const C = 238.76;
+
+  $('progressBar').style.strokeDashoffset = String(C * (1 - percent / 100));
+  $('bigPercent').textContent = percent;
+  $('completionRateText').textContent = `${completed} / ${total} Done (${percent}%)`;
+
+  const mood = percent >= 100 ? 3 : percent >= 50 ? 2 : percent > 0 ? 1 : 0;
+  $('moodLine').textContent = ["Let's make the first move.", "Good start. Keep stacking.", "Past halfway. Finish strong.", "All done. Never miss twice."][mood];
+  const m = $('mascot');
+  if (mood !== lastMood) {
+    m.innerHTML = mascotSVG(percent);
+    if (lastMood !== null) { m.classList.remove('bump'); void m.offsetWidth; m.classList.add('bump'); }
+    lastMood = mood;
+  }
+}
+
+// ---------- Calendar Export (.ICS File) ----------
+function downloadICS() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const dateStr = `${year}${month}${day}`;
+
+  let icsContent = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Apex Habit System//Daily Routine//EN",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH"
+  ];
+
+  currentSchedule.forEach((item, index) => {
+    const [sH, sM] = item.start.split(':');
+    let [eH, eM] = item.end.split(':');
+    let endDayStr = dateStr;
+    if (item.end === "24:00") {
+      eH = "23";
+      eM = "59";
+    }
+
+    const dtStart = `${dateStr}T${sH}${sM}00`;
+    const dtEnd = `${endDayStr}T${eH}${eM}00`;
+
+    icsContent.push(
+      "BEGIN:VEVENT",
+      `UID:routine-${dateStr}-${index}@apexsystem.local`,
+      `DTSTAMP:${dateStr}T000000Z`,
+      `DTSTART:${dtStart}`,
+      `DTEND:${dtEnd}`,
+      `SUMMARY:${item.title}`,
+      `DESCRIPTION:Apex Daily Discipline Block [${item.tag}]. System over feelings.`,
+      "STATUS:CONFIRMED",
+      "END:VEVENT"
+    );
+  });
+
+  icsContent.push("END:VCALENDAR");
+
+  const blob = new Blob([icsContent.join("\r\n")], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `apex_schedule_day_${selectedDay}.ics`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+  toast('Calendar file exported');
+}
+
+init();
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
+</script>
+
+</body></html>
